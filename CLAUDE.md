@@ -66,7 +66,7 @@ nix-collect-garbage -d
 The repository follows a modular architecture with clear separation of concerns:
 
 **Entry Point**: `flake.nix`
-- Defines inputs: nixpkgs, nix-darwin, home-manager, claude-code
+- Defines inputs: nixpkgs, nix-darwin, home-manager, claude-code, agent-skills, anthropic-skills
 - Contains helper functions `mkDarwinSystem` and `mkNixOSSystem`
 - Exports `darwinConfigurations.nous` and `nixosConfigurations.nixos-vm`
 
@@ -84,10 +84,11 @@ The repository follows a modular architecture with clear separation of concerns:
 - `modules/shared/default.nix`: Cross-platform settings (allowUnfree, environment variables)
 
 **User-Level Configuration** (Home Manager):
-- `home/default.nix`: Entry point, imports shell/git/dev-tools modules
+- `home/default.nix`: Entry point, imports shell/git/dev-tools/skills modules
 - `home/modules/shell.nix`: Zsh, Starship, fzf, zoxide, eza, bat
 - `home/modules/git.nix`: Git config, delta, GitHub CLI
 - `home/modules/dev-tools.nix`: CLI tools, direnv, tmux, SSH
+- `home/modules/skills.nix`: Claude Code skills management via agent-skills-nix
 
 ### Key Design Patterns
 
@@ -132,6 +133,68 @@ homebrew.casks = [
 ```
 
 Then rebuild: `nrs`
+
+## Managing Claude Code Skills
+
+Skills are managed declaratively through the `agent-skills-nix` flake. Configuration is in `home/modules/skills.nix`.
+
+### Enable a Skill
+
+Add the skill name to the enable list in `home/modules/skills.nix`:
+```nix
+skills.enable = [
+  "skill-creator"
+  "new-skill-name"
+];
+```
+
+### Add a New Skill Source
+
+1. Add input to `flake.nix`:
+```nix
+inputs = {
+  my-skills = {
+    url = "github:username/skills-repo";
+    flake = false;
+  };
+};
+```
+
+2. Add to outputs: `outputs = inputs@{ ..., my-skills, ... }:`
+
+3. Configure in `home/modules/skills.nix`:
+```nix
+sources.my-skills = {
+  path = inputs.my-skills;
+  subdir = "skills";  # if needed
+};
+```
+
+### Create a Local Skill
+
+1. Create directory: `mkdir -p skills/my-skill`
+2. Add `SKILL.md` file with skill content
+3. The `local` source in `skills.nix` points to `../../skills`
+4. Enable in `skills.enable` list
+5. Stage files: `git add skills/`
+
+### Update Remote Skills
+
+```bash
+# Update specific skill source
+nix flake lock --update-input anthropic-skills
+
+# Update all inputs
+nfu
+```
+
+### File Locations
+
+| Purpose | Path |
+|---------|------|
+| Skills config | `home/modules/skills.nix` |
+| Local skills | `skills/` |
+| Synced output | `~/.claude/skills/` |
 
 ## Modifying Configurations
 

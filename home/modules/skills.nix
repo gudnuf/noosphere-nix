@@ -10,10 +10,15 @@
       subdir = "skills";
     };
 
+    sources.local = {
+      path = ../../skills;
+    };
+
     # Enable specific skills (or use enableAll = true for all)
     # Available skills can be discovered with: nix run .#skills-list
     skills.enable = [
       "skill-creator"
+      "nix-skills-management"
     ];
 
     # Uncomment to enable all skills from all sources:
