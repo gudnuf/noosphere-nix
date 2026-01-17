@@ -10,8 +10,15 @@
     home = "/Users/${username}";
   };
 
-  # Enable Touch ID for sudo
-  security.pam.services.sudo_local.touchIdAuth = true;
+  # Enable Touch ID for sudo with pam_reattach for tmux support
+  security.pam.services.sudo_local = {
+    touchIdAuth = true;
+    # Add pam_reattach before pam_tid.so for Touch ID in tmux
+    text = ''
+      auth       optional       ${pkgs.pam-reattach}/lib/pam/pam_reattach.so
+      auth       sufficient     pam_tid.so
+    '';
+  };
 
   # Disable nix-darwin's Nix management (using Determinate Nix)
   nix.enable = false;
