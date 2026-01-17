@@ -1,10 +1,11 @@
-{ pkgs, username, ... }:
+{ pkgs, inputs, username, ... }:
 
 {
   imports = [
     ./modules/shell.nix
     ./modules/git.nix
     ./modules/dev-tools.nix
+    ./modules/skills.nix
   ];
 
   # Home Manager state version

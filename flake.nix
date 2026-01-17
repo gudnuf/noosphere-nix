@@ -17,9 +17,20 @@
     claude-code = {
       url = "github:sadjow/claude-code-nix";
     };
+
+    agent-skills = {
+      url = "github:Kyure-A/agent-skills-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.home-manager.follows = "home-manager";
+    };
+
+    anthropic-skills = {
+      url = "github:anthropics/skills";
+      flake = false;
+    };
   };
 
-  outputs = inputs@{ self, nixpkgs, nix-darwin, home-manager, claude-code, ... }:
+  outputs = inputs@{ self, nixpkgs, nix-darwin, home-manager, claude-code, agent-skills, anthropic-skills, ... }:
     let
       username = "claude";
 
@@ -38,7 +49,12 @@
               useGlobalPkgs = true;
               useUserPackages = true;
               extraSpecialArgs = { inherit inputs username; };
-              users.${username} = import ./home;
+              users.${username} = {
+                imports = [
+                  (import ./home)
+                  agent-skills.homeManagerModules.default
+                ];
+              };
             };
           }
         ];
@@ -58,7 +74,12 @@
               useGlobalPkgs = true;
               useUserPackages = true;
               extraSpecialArgs = { inherit inputs username; };
-              users.${username} = import ./home;
+              users.${username} = {
+                imports = [
+                  (import ./home)
+                  agent-skills.homeManagerModules.default
+                ];
+              };
             };
           }
         ];
