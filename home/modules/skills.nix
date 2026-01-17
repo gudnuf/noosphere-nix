@@ -19,6 +19,7 @@
     skills.enable = [
       "skill-creator"
       "nix-skills-management"
+      "update-context"
     ];
 
     # Uncomment to enable all skills from all sources:
