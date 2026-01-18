@@ -266,15 +266,22 @@ nix-collect-garbage -d  # Delete old system generations
 ## How to Update This File
 
 This file should be updated whenever:
-- New packages/tools are installed
+- New packages/tools are installed on this host
 - System configuration patterns change
 - New skills are added
 - Workflows are established
 
-Use the `/update-context` skill (or update-context skill) to maintain this file following best practices for context documentation.
+**Use the `/update-host-context` skill** for guidance on:
+- When and how to update host-specific CLAUDE.md files
+- Adding new hosts to the system
+- Keeping documentation in sync with configuration
+- Best practices for host context maintenance
+
+You can also use `/update-context` for general context file maintenance following best practices.
 
 ## Related Files
 
 - `CLAUDE.md` - General nix-config structure and patterns (repo-wide)
 - `SECRETS.md` - Secrets management documentation
+- `skills/update-host-context/SKILL.md` - Skill for maintaining host-specific context
 - `skills/update-context/SKILL.md` - Skill for maintaining CLAUDE.md files

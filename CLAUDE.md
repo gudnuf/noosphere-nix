@@ -114,6 +114,9 @@ Each host has its own `CLAUDE.{hostname}.md` file that documents:
 2. Ensure hostname matches in flake.nix
 3. Rebuild on that host (`nrs`) to activate symlink
 
+**Managing host context:**
+Use the `/update-host-context` skill for complete guidance on maintaining host-specific CLAUDE.md files. See `skills/update-host-context/SKILL.md` for details.
+
 ### Secrets Management
 
 Sensitive data (API tokens, credentials) are stored in `secrets.nix` (git-ignored). See **[SECRETS.md](SECRETS.md)** for complete documentation.

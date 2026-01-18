@@ -20,6 +20,7 @@
       "skill-creator"
       "nix-skills-management"
       "update-context"
+      "update-host-context"
     ];
 
     # Uncomment to enable all skills from all sources:

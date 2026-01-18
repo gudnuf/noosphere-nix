@@ -60,10 +60,13 @@ sudo /nix/var/nix/profiles/system-N-link/bin/switch-to-configuration switch
 
 ## Notes
 
-This file should be updated when the NixOS VM is fully configured. Use the `/update-context` skill to maintain this file.
+This file should be updated when the NixOS VM is fully configured.
+
+**Use the `/update-host-context` skill** for guidance on maintaining this host-specific context file.
 
 ## Related Files
 
 - `CLAUDE.md` - General nix-config structure and patterns (repo-wide)
 - `CLAUDE.nous.md` - macOS host configuration for reference
 - `SECRETS.md` - Secrets management documentation
+- `skills/update-host-context/SKILL.md` - Skill for maintaining host-specific context
