@@ -11,6 +11,7 @@ in
   imports = [
     ./modules/shell.nix
     ./modules/git.nix
+    ./modules/ssh.nix
     ./modules/dev-tools.nix
     ./modules/neovim.nix
     ./modules/skills.nix

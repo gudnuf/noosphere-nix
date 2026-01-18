@@ -132,7 +132,8 @@ ls -> eza, ll -> eza -la, cat -> bat
 
 - **direnv:** Auto-loads per-directory Nix environments (`.envrc` files)
 - **tmux:** Terminal multiplexer with deep blue theme, vi bindings, Touch ID support
-- **SSH:** 1Password agent integration for key management
+- **SSH:** 1Password agent integration for key management (config managed by Home Manager)
+  - GitHub: dedicated ED25519 key at `~/.ssh/id_ed25519_github` (user: gudnuf)
 - **Git:** Configured via `home/modules/git.nix`
 
 ## Skills Management
