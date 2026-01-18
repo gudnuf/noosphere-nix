@@ -18,7 +18,7 @@ if [[ -z "${FLAKE_DIR:-}" ]]; then
 fi
 
 # Defaults
-SERVER_TYPE="cx22"       # 2 vCPU, 4GB RAM, 40GB disk (~€4/month)
+SERVER_TYPE="cpx21"      # 3 vCPU, 4GB RAM, 80GB disk (~€7/month)
 LOCATION="fsn1"          # Falkenstein, Germany
 IMAGE="ubuntu-24.04"     # Base image for nixos-anywhere
 SSH_KEY_NAME="claude@nous"
@@ -51,9 +51,9 @@ Options:
   --help          Show this help message
 
 Server Types:
-  cx22   - 2 vCPU, 4GB RAM, 40GB disk  (~€4/month)
-  cx32   - 4 vCPU, 8GB RAM, 80GB disk  (~€8/month)
-  cx42   - 8 vCPU, 16GB RAM, 160GB disk (~€15/month)
+  cpx11  - 2 vCPU, 2GB RAM, 40GB disk   (~€5/month)
+  cpx21  - 3 vCPU, 4GB RAM, 80GB disk   (~€7/month) [default]
+  cpx31  - 4 vCPU, 8GB RAM, 160GB disk  (~€14/month)
 
 Locations:
   fsn1   - Falkenstein, Germany
