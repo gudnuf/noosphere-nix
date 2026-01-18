@@ -43,7 +43,7 @@
       glog = "git log --oneline --graph --decorate";
 
       # Nix shortcuts
-      nrs = "darwin-rebuild switch --flake ~/.config/nix-config#nous";
+      nrs = "sudo darwin-rebuild switch --flake ~/.config/nix-config#nous";
       nfu = "nix flake update ~/.config/nix-config";
       nfc = "nix flake check ~/.config/nix-config";
 
