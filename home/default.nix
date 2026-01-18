@@ -5,6 +5,7 @@
     ./modules/shell.nix
     ./modules/git.nix
     ./modules/dev-tools.nix
+    ./modules/neovim.nix
     ./modules/skills.nix
   ];
 
@@ -22,7 +23,7 @@
 
   # Session variables
   home.sessionVariables = {
-    EDITOR = "vim";
-    VISUAL = "vim";
+    EDITOR = "nvim";
+    VISUAL = "nvim";
   };
 }

@@ -52,7 +52,7 @@
     nix-direnv.enable = true;
   };
 
-  # tmux - terminal multiplexer
+  # tmux - terminal multiplexer with deep blue theme
   programs.tmux = {
     enable = true;
     clock24 = true;
@@ -62,6 +62,64 @@
     baseIndex = 1;
     escapeTime = 0;
     extraConfig = ''
+      # ============================================================================
+      # THEMING - Deep Blue Color Scheme
+      # ============================================================================
+
+      # Deep blue background tones
+      set -g @bg_dark "#1a1d2e"
+      set -g @bg_main "#1e2030"
+      set -g @bg_light "#3b3f5f"
+
+      # Accent colors
+      set -g @blue_bright "#82aaff"
+      set -g @cyan "#89ddff"
+      set -g @green "#c3e88d"
+      set -g @yellow "#ffcb6b"
+      set -g @red "#ff757f"
+      set -g @text_fg "#cdd6f4"
+      set -g @text_muted "#6b7086"
+
+      # ============================================================================
+      # PANE STYLING
+      # ============================================================================
+
+      # Active pane border - bright cyan
+      set -g pane-active-border-style "fg=#{@cyan},bg=#{@bg_main}"
+      # Inactive pane border - muted color
+      set -g pane-border-style "fg=#{@bg_light},bg=#{@bg_main}"
+
+      # ============================================================================
+      # STATUS BAR STYLING
+      # ============================================================================
+
+      # Main status bar
+      set -g status-style "bg=#{@bg_main},fg=#{@text_fg}"
+      set -g status-left-length 40
+      set -g status-right-length 60
+
+      # Status bar left - session name and window info
+      set -g status-left "#[bg=#{@blue_bright},fg=#{@bg_dark},bold] #S #[bg=#{@bg_main},fg=#{@text_fg}] "
+
+      # Status bar right - time, date, and vim mode
+      set -g status-right "#[bg=#{@bg_light},fg=#{@cyan}] #{pane_mode} #[bg=#{@bg_main}] %H:%M #[bg=#{@yellow},fg=#{@bg_dark}] %a %d "
+
+      # Window status styling
+      set -g window-status-format "#[bg=#{@bg_main},fg=#{@text_muted}] #I #W "
+      set -g window-status-current-format "#[bg=#{@green},fg=#{@bg_dark},bold] #I #W #[bg=#{@bg_main},fg=#{@text_fg}] "
+      set -g window-status-separator ""
+
+      # Message styling
+      set -g message-style "bg=#{@yellow},fg=#{@bg_dark},bold"
+      set -g message-command-style "bg=#{@bg_light},fg=#{@cyan}"
+
+      # Command line styling
+      set -g mode-style "bg=#{@cyan},fg=#{@bg_dark}"
+
+      # ============================================================================
+      # KEYBINDINGS & FUNCTIONALITY
+      # ============================================================================
+
       # Mouse support
       set -g mouse on
 
@@ -75,7 +133,7 @@
       bind k select-pane -U
       bind l select-pane -R
 
-      # Resize panes
+      # Resize panes with vim keys
       bind -r H resize-pane -L 5
       bind -r J resize-pane -D 5
       bind -r K resize-pane -U 5
@@ -83,11 +141,6 @@
 
       # Reload config
       bind r source-file ~/.config/tmux/tmux.conf \; display "Config reloaded!"
-
-      # Status bar styling
-      set -g status-style 'bg=#1e1e2e fg=#cdd6f4'
-      set -g status-left-length 40
-      set -g status-right-length 60
     '';
   };
 

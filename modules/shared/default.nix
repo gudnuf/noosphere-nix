@@ -9,8 +9,8 @@
 
   # Common environment variables
   environment.variables = {
-    EDITOR = "vim";
-    VISUAL = "vim";
+    EDITOR = "nvim";
+    VISUAL = "nvim";
     LANG = "en_US.UTF-8";
   };
 }

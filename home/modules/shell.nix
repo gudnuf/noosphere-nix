@@ -73,43 +73,93 @@
     '';
   };
 
-  # Starship prompt
+  # Starship prompt with theme colors
   programs.starship = {
     enable = true;
     settings = {
+      format = "$directory$git_branch$git_status$nix_shell$nodejs$python$rust$language$cmd_duration$character";
       add_newline = true;
 
+      # Character module - prompt indicator
       character = {
-        success_symbol = "[>](bold green)";
-        error_symbol = "[>](bold red)";
+        success_symbol = "[➜](bold #82aaff)";
+        error_symbol = "[➜](bold #ff757f)";
       };
 
+      # Directory module with deep blue theme
       directory = {
+        style = "bold #89ddff";
         truncation_length = 3;
-        truncation_symbol = ".../";
+        truncation_symbol = "…/";
+        home_symbol = "~";
+        format = "[$read_only$path]($style) ";
+        read_only = "🔒 ";
+        read_only_style = "#ff757f";
       };
 
+      # Git branch module
       git_branch = {
         symbol = " ";
+        style = "#c3e88d";
+        format = "on [$symbol$branch]($style) ";
       };
 
+      # Git status module with semantic colors
       git_status = {
-        ahead = "[+\${count}](green)";
-        behind = "[-\${count}](red)";
-        diverged = "[+\${ahead_count}](green)[-\${behind_count}](red)";
+        style = "bold #ffcb6b";
+        format = "([\\[$all_status$ahead_behind\\]]($style) )";
+        ahead = "[⇡\${count}](#82aaff)";
+        behind = "[⇣\${count}](#ff757f)";
+        diverged = "[⇕⇡\${ahead_count}⇣\${behind_count}](#ffcb6b)";
+        untracked = "[?](#c3e88d)";
+        stashed = "[📦](#82aaff)";
+        modified = "[!](#ffcb6b)";
+        staged = "[+](#c3e88d)";
+        renamed = "[»](#82aaff)";
+        deleted = "[✘](#ff757f)";
       };
 
+      # Nix shell indicator
       nix_shell = {
-        symbol = " ";
-        format = "via [$symbol$state( \\($name\\))]($style) ";
+        symbol = "";
+        style = "#82aaff";
+        format = "via [$symbol($state)]($style) ";
       };
 
-      # Minimal right prompt
+      # Command duration - show if longer than 2s
+      cmd_duration = {
+        min_time = 2000;
+        style = "#ffcb6b";
+        format = "took [$duration]($style) ";
+      };
+
+      # Language indicators
+      nodejs = {
+        symbol = " ";
+        style = "#c3e88d";
+        format = "via [$symbol($version)]($style) ";
+      };
+
+      python = {
+        symbol = "🐍 ";
+        style = "#ffcb6b";
+        format = "via [$symbol($version)]($style) ";
+      };
+
+      rust = {
+        symbol = "🦀 ";
+        style = "#ff757f";
+        format = "via [$symbol($version)]($style) ";
+      };
+
+      # Disable unused modules
       time.disabled = true;
+      username.disabled = true;
+      hostname.disabled = true;
     };
   };
 
-  # fzf - fuzzy finder
+  # fzf - fuzzy finder with deep blue color theme
   programs.fzf = {
     enable = true;
     enableZshIntegration = true;
@@ -117,6 +167,14 @@
       "--height 40%"
       "--layout=reverse"
       "--border"
+      "--color=bg:#1a1d2e,bg+:#1e2030"
+      "--color=fg:#cdd6f4,fg+:#89ddff"
+      "--color=hl:#82aaff,hl+:#82aaff"
+      "--color=border:#3b3f5f"
+      "--color=pointer:#89ddff"
+      "--color=marker:#c3e88d"
+      "--color=spinner:#ffcb6b"
+      "--color=header:#ff757f"
     ];
     defaultCommand = "fd --type f --hidden --follow --exclude .git";
     fileWidgetCommand = "fd --type f --hidden --follow --exclude .git";
@@ -137,11 +195,11 @@
     git = true;
   };
 
-  # bat - better cat
+  # bat - better cat with monokai theme for consistency
   programs.bat = {
     enable = true;
     config = {
-      theme = "TwoDark";
+      theme = "Monokai Extended";
       style = "numbers,changes,header";
     };
   };
