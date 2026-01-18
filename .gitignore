@@ -1,2 +1,13 @@
-.trees/
+# Secrets - never commit these
 secrets.nix
+
+# Build results
+result
+result-*
+
+# Editor files
+*.swp
+*.swo
+*~
+.DS_Store
+.trees/

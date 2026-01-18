@@ -1,5 +1,12 @@
 { pkgs, inputs, username, ... }:
 
+let
+  # Import secrets if the file exists, otherwise use empty set
+  secretsPath = ../secrets.nix;
+  secrets = if builtins.pathExists secretsPath
+    then import secretsPath
+    else {};
+in
 {
   imports = [
     ./modules/shell.nix
@@ -21,9 +28,9 @@
   # Let Home Manager manage itself
   programs.home-manager.enable = true;
 
-  # Session variables
+  # Session variables (merge with secrets)
   home.sessionVariables = {
     EDITOR = "nvim";
     VISUAL = "nvim";
-  };
+  } // secrets;
 }
