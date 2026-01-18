@@ -13,6 +13,7 @@
     # File viewers
     less         # Pager
     file         # File type detection
+    glow         # Markdown renderer
 
     # Networking
     curl
@@ -36,6 +37,9 @@
     # Development
     gnumake
     cmake
+
+    # Git tools
+    lazygit      # Git TUI
 
     # AI tools
     claude-code  # Claude Code CLI
