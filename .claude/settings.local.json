@@ -15,7 +15,18 @@
       "Bash(delta:*)",
       "Bash(chmod:*)",
       "Bash(hcloud version:*)",
-      "Bash(nix flake show:*)"
+      "Bash(nix flake show:*)",
+      "Bash(export HCLOUD_TOKEN=\"oQ6A6WoIr4Ojj38c8FJUtO9CK0ma6RIu8j1wFWxbPnQKzyfCe6k9OAom6wKCfaa0\")",
+      "Bash(hcloud location:*)",
+      "Bash(timeout 1200 bash -c 'while nix run ~/.config/nix-config#deploy-hetzner -- hetzner --create --server-type cx23 --location nbg1 2>&1 | tail -40; [ $? -ne 0 ] && echo \"\"Retrying...\"\" && sleep 5; done')",
+      "Bash(hcloud server describe:*)",
+      "Bash(ssh claude@46.224.223.198 'echo \"\"✓ NixOS Online\"\" && uname -a && nix --version')",
+      "Bash(ssh -o ConnectTimeout=30 claude@46.224.223.198 'echo \"\"✓ NixOS Online\"\"; nix --version; uname -a')",
+      "Bash(ssh:*)",
+      "Bash(hcloud server request-console:*)",
+      "Bash(jobs)",
+      "Bash(wait)",
+      "Bash(echo:*)"
     ]
   }
 }

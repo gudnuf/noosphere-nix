@@ -2,6 +2,7 @@
 
 {
   imports = [
+    ./network.nix
     ./ssh.nix
     ./mosh.nix
     ./firewall.nix
