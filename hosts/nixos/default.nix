@@ -2,7 +2,8 @@
 
 let
   # Cloud VMs use disko for filesystem management
-  isCloudVM = hostname == "noosphere";
+  cloudVMs = [ "noosphere" "mynymbox" ];
+  isCloudVM = builtins.elem hostname cloudVMs;
 in
 {
   # Hostname
@@ -29,8 +30,7 @@ in
     extraGroups = [ "wheel" ];
     shell = pkgs.zsh;
     openssh.authorizedKeys.keys = [
-      # Add your SSH public keys here
-      # "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5... user@machine"
+      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIH/nQoOA5iA4VqUH4USn11AnESeR+TWFKmgME6wE2rkC claude@nous"
     ];
   };
 

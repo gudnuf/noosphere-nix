@@ -5,7 +5,7 @@
   # Compatible with nixos-anywhere automated deployments
   disko.devices.disk.main = {
     type = "disk";
-    device = "/dev/sda";  # Common for cloud VMs (adjust if needed)
+    device = "/dev/vda";  # Common for cloud VMs (virtio)
     content = {
       type = "gpt";
       partitions = {

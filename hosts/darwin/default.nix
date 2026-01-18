@@ -83,7 +83,7 @@
       # Add any Homebrew formulae here
     ];
     casks = [
-      # Add any Homebrew casks here
+      "utm"  # Virtual machine host for testing NixOS configs
     ];
   };
 }

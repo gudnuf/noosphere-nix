@@ -5,6 +5,7 @@
     ./ssh.nix
     ./mosh.nix
     ./firewall.nix
+    ./vm-guest.nix
   ];
   # NixOS-specific Nix configuration
   nix = {
