@@ -28,6 +28,11 @@
       url = "github:anthropics/skills";
       flake = false;
     };
+
+    disko = {
+      url = "github:nix-community/disko";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs = inputs@{ self, nixpkgs, nix-darwin, home-manager, claude-code, agent-skills, anthropic-skills, ... }:
@@ -48,7 +53,7 @@
             home-manager = {
               useGlobalPkgs = true;
               useUserPackages = true;
-              extraSpecialArgs = { inherit inputs username; };
+              extraSpecialArgs = { inherit inputs username hostname; };
               users.${username} = {
                 imports = [
                   (import ./home)
@@ -61,7 +66,7 @@
       };
 
       # Helper to create NixOS systems
-      mkNixOSSystem = { system, hostname }: nixpkgs.lib.nixosSystem {
+      mkNixOSSystem = { system, hostname, enableDisko ? false }: nixpkgs.lib.nixosSystem {
         inherit system;
         specialArgs = { inherit inputs username hostname; };
         modules = [
@@ -73,7 +78,7 @@
             home-manager = {
               useGlobalPkgs = true;
               useUserPackages = true;
-              extraSpecialArgs = { inherit inputs username; };
+              extraSpecialArgs = { inherit inputs username hostname; };
               users.${username} = {
                 imports = [
                   (import ./home)
@@ -82,7 +87,10 @@
               };
             };
           }
-        ];
+        ] ++ (if enableDisko then [
+          inputs.disko.nixosModules.disko
+          ./modules/nixos/disko.nix
+        ] else []);
       };
     in
     {
@@ -94,11 +102,18 @@
         };
       };
 
-      # NixOS configuration (for VM testing)
+      # NixOS configurations
       nixosConfigurations = {
+        # Local VM testing (aarch64)
         nixos-vm = mkNixOSSystem {
           system = "aarch64-linux";
           hostname = "nixos-vm";
+        };
+        # Cloud VMs (x86_64)
+        noosphere = mkNixOSSystem {
+          system = "x86_64-linux";
+          hostname = "noosphere";
+          enableDisko = true;
         };
       };
     };

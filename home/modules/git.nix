@@ -31,8 +31,10 @@
         autoSquash = true;
       };
 
-      # Credential helper (macOS keychain)
-      credential.helper = "osxkeychain";
+      # Credential helper (platform-aware)
+      credential.helper = if pkgs.stdenv.isDarwin
+        then "osxkeychain"
+        else "cache --timeout=3600";
 
       # URL shortcuts
       url = {

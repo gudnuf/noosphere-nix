@@ -144,15 +144,14 @@
     '';
   };
 
-  # SSH config management
+  # SSH config management (platform-aware)
   programs.ssh = {
     enable = true;
     enableDefaultConfig = false;
-    matchBlocks = {
-      "*" = {
-        addKeysToAgent = "yes";
-        identityAgent = "~/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock";
-      };
-    };
+    matchBlocks."*" = {
+      addKeysToAgent = "yes";
+    } // (if pkgs.stdenv.isDarwin then {
+      identityAgent = "~/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock";
+    } else {});
   };
 }

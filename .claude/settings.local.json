@@ -6,7 +6,10 @@
       "Bash(git restore:*)",
       "Bash(git add:*)",
       "Bash(tree:*)",
-      "Bash(git rebase:*)"
+      "Bash(git rebase:*)",
+      "Bash(nix --extra-experimental-features 'nix-command flakes' flake check:*)",
+      "Bash(git commit:*)",
+      "WebSearch"
     ]
   }
 }

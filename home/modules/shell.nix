@@ -1,5 +1,8 @@
-{ pkgs, ... }:
+{ pkgs, hostname, ... }:
 
+let
+  rebuildCmd = if pkgs.stdenv.isDarwin then "darwin-rebuild" else "nixos-rebuild";
+in
 {
   # Zsh configuration
   programs.zsh = {
@@ -43,7 +46,7 @@
       glog = "git log --oneline --graph --decorate";
 
       # Nix shortcuts
-      nrs = "sudo darwin-rebuild switch --flake ~/.config/nix-config#nous";
+      nrs = "sudo ${rebuildCmd} switch --flake ~/.config/nix-config#${hostname}";
       nfu = "nix flake update ~/.config/nix-config";
       nfc = "nix flake check ~/.config/nix-config";
 

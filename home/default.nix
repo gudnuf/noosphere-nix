@@ -1,4 +1,4 @@
-{ pkgs, inputs, username, ... }:
+{ lib, pkgs, inputs, username, ... }:
 
 let
   # Import secrets if the file exists, otherwise use empty set
@@ -35,13 +35,13 @@ in
   } // secrets;
 
   # Set secrets in launchd environment for GUI apps on macOS
-  launchd.agents = pkgs.lib.mapAttrs' (name: value:
-    pkgs.lib.nameValuePair "setenv-${name}" {
+  launchd.agents = lib.mkIf pkgs.stdenv.isDarwin (lib.mapAttrs' (name: value:
+    lib.nameValuePair "setenv-${name}" {
       enable = true;
       config = {
         ProgramArguments = [ "${pkgs.bash}/bin/bash" "-c" "/bin/launchctl setenv ${name} '${value}'" ];
         RunAtLoad = true;
       };
     }
-  ) secrets;
+  ) secrets);
 }

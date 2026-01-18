@@ -1,42 +1,47 @@
-{ pkgs, hostname, username, ... }:
+{ lib, pkgs, hostname, username, ... }:
 
+let
+  # Cloud VMs use disko for filesystem management
+  isCloudVM = hostname == "noosphere";
+in
 {
   # Hostname
   networking.hostName = hostname;
 
-  # Filesystems (required for NixOS)
-  fileSystems."/" = {
+  # Filesystems (only for local VMs - cloud VMs use disko)
+  fileSystems."/" = lib.mkIf (!isCloudVM) {
     device = "/dev/disk/by-label/nixos";
     fsType = "ext4";
   };
 
-  fileSystems."/boot" = {
+  fileSystems."/boot" = lib.mkIf (!isCloudVM) {
     device = "/dev/disk/by-label/boot";
     fsType = "vfat";
   };
 
-  # Bootloader (for VM)
+  # Bootloader
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
   # User configuration
   users.users.${username} = {
     isNormalUser = true;
-    extraGroups = [ "wheel" "networkmanager" ];
-    initialPassword = "changeme";
+    extraGroups = [ "wheel" ];
+    shell = pkgs.zsh;
+    openssh.authorizedKeys.keys = [
+      # Add your SSH public keys here
+      # "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5... user@machine"
+    ];
   };
 
-  # Basic networking
-  networking.networkmanager.enable = true;
+  # Passwordless sudo for wheel group (needed for remote management)
+  security.sudo.wheelNeedsPassword = false;
 
   # Timezone
   time.timeZone = "UTC";
 
   # Locale
   i18n.defaultLocale = "en_US.UTF-8";
-
-  # Enable OpenSSH
-  services.openssh.enable = true;
 
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;

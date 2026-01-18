@@ -1,6 +1,11 @@
 { pkgs, ... }:
 
 {
+  imports = [
+    ./ssh.nix
+    ./mosh.nix
+    ./firewall.nix
+  ];
   # NixOS-specific Nix configuration
   nix = {
     # NixOS-specific GC timing
