@@ -103,7 +103,10 @@
           deploy-hetzner = pkgs.writeShellApplication {
             name = "deploy-hetzner";
             runtimeInputs = with pkgs; [ hcloud nixos-anywhere openssh ];
-            text = builtins.readFile ./scripts/deploy-hetzner.sh;
+            text = ''
+              export FLAKE_DIR="${self}"
+              ${builtins.readFile ./scripts/deploy-hetzner.sh}
+            '';
           };
         in
         {

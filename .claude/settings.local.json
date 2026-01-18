@@ -14,7 +14,8 @@
       "Bash(lazygit:*)",
       "Bash(delta:*)",
       "Bash(chmod:*)",
-      "Bash(hcloud version:*)"
+      "Bash(hcloud version:*)",
+      "Bash(nix flake show:*)"
     ]
   }
 }

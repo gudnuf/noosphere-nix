@@ -11,8 +11,11 @@ set -euo pipefail
 #   deploy-hetzner.sh hetzner                       # Deploy to existing server
 #   deploy-hetzner.sh myserver --create --server-type cx32 --location nbg1
 
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-FLAKE_DIR="$(dirname "$SCRIPT_DIR")"
+# FLAKE_DIR can be set by the nix app wrapper, or computed here
+if [[ -z "${FLAKE_DIR:-}" ]]; then
+    SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+    FLAKE_DIR="$(dirname "$SCRIPT_DIR")"
+fi
 
 # Defaults
 SERVER_TYPE="cx22"       # 2 vCPU, 4GB RAM, 40GB disk (~€4/month)
