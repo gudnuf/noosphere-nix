@@ -1,20 +1,13 @@
-{ ... }:
+{ config, lib, ... }:
 
 {
+  # Enable automatic DHCP on all interfaces
+  networking.useDHCP = lib.mkDefault true;
+  networking.interfaces = { };
+
   # Enable networking
-  networking.useDHCP = false;
+  networking.enableIPv6 = true;
 
-  # Configure all interfaces with DHCP
-  # This works for most cloud providers including Hetzner
-  networking.interfaces = {
-    eth0 = {
-      useDHCP = true;
-    };
-  };
-
-  # DNS configuration (fallback)
-  networking.nameservers = [ "8.8.8.8" "8.8.4.4" ];
-
-  # Enable systemd-networkd for proper network management
-  systemd.network.enable = true;
+  # Standard cloud DNS
+  networking.nameservers = lib.mkDefault [ "8.8.8.8" "8.8.4.4" "1.1.1.1" ];
 }
