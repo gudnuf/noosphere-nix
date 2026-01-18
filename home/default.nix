@@ -1,4 +1,4 @@
-{ lib, pkgs, inputs, username, ... }:
+{ lib, pkgs, inputs, username, hostname, ... }:
 
 let
   # Import secrets if the file exists, otherwise use empty set
@@ -27,6 +27,9 @@ in
 
   # Let Home Manager manage itself
   programs.home-manager.enable = true;
+
+  # Symlink host-specific CLAUDE.md to ~/.claude/CLAUDE.md
+  home.file.".claude/CLAUDE.md".source = ../CLAUDE.${hostname}.md;
 
   # Session variables (merge with secrets for shell)
   home.sessionVariables = {

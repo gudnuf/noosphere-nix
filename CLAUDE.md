@@ -2,6 +2,12 @@
 
 Nix/nix-darwin configuration for macOS with Home Manager integration. Uses Determinate Nix installer (external Nix management, `nix.enable = false`).
 
+**Note:** This file documents the overall nix-config repository structure. For host-specific configuration details (packages, tools, workflows), see the host-specific CLAUDE files:
+- **claude@nous (macOS):** `CLAUDE.nous.md` (symlinked to `~/.claude/CLAUDE.md`)
+- **claude@nixos-vm (NixOS):** `CLAUDE.nixos-vm.md` (future)
+
+Each host-specific file documents how Claude Code runs on that machine and how to modify its global state.
+
 ## Tech Stack
 
 | Component | Purpose |
@@ -20,9 +26,11 @@ flake.nix              # Entry point, defines inputs & system builders
 │   ├── darwin/        # System packages, shells, fonts
 │   └── shared/        # Cross-platform settings (allowUnfree, env vars)
 ├── home/
-│   ├── default.nix    # Home Manager entry point
+│   ├── default.nix    # Home Manager entry point (symlinks CLAUDE.{hostname}.md)
 │   └── modules/       # shell, git, dev-tools, skills
 ├── skills/            # Local Claude Code skills (syncs to ~/.claude/skills/)
+├── CLAUDE.md          # Repository-wide documentation (structure, patterns)
+├── CLAUDE.nous.md     # Host-specific docs for claude@nous (→ ~/.claude/CLAUDE.md)
 ├── secrets.nix        # Your secrets (git-ignored, not committed)
 └── secrets.nix.template  # Template for secrets file
 ```
@@ -83,6 +91,28 @@ skills.enable = [
 3. Stage with `git add skills/`
 
 Skills sync to `~/.claude/skills/` on rebuild.
+
+### Host-Specific Context Files
+
+Each host has its own `CLAUDE.{hostname}.md` file that documents:
+- How Claude Code is running on that specific machine
+- All installed packages and tools for that host
+- How to modify that machine's global state using Nix
+- Host-specific workflows and configurations
+
+**How it works:**
+1. Create `CLAUDE.{hostname}.md` in the repository root
+2. Nix symlinks it to `~/.claude/CLAUDE.md` on that host (via `home/default.nix:32`)
+3. Claude Code reads it as machine-specific context
+
+**Current hosts:**
+- `CLAUDE.nous.md` - macOS machine (claude@nous)
+- `CLAUDE.nixos-vm.md` - NixOS VM (future)
+
+**To create for a new host:**
+1. Create `CLAUDE.{new-hostname}.md` documenting that machine
+2. Ensure hostname matches in flake.nix
+3. Rebuild on that host (`nrs`) to activate symlink
 
 ### Secrets Management
 

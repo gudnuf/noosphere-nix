@@ -115,6 +115,11 @@
           hostname = "noosphere";
           enableDisko = true;
         };
+        mynymbox = mkNixOSSystem {
+          system = "x86_64-linux";
+          hostname = "mynymbox";
+          enableDisko = true;
+        };
       };
     };
 }
