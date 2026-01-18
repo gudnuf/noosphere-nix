@@ -28,9 +28,20 @@ in
   # Let Home Manager manage itself
   programs.home-manager.enable = true;
 
-  # Session variables (merge with secrets)
+  # Session variables (merge with secrets for shell)
   home.sessionVariables = {
     EDITOR = "nvim";
     VISUAL = "nvim";
   } // secrets;
+
+  # Set secrets in launchd environment for GUI apps on macOS
+  launchd.agents = pkgs.lib.mapAttrs' (name: value:
+    pkgs.lib.nameValuePair "setenv-${name}" {
+      enable = true;
+      config = {
+        ProgramArguments = [ "${pkgs.bash}/bin/bash" "-c" "/bin/launchctl setenv ${name} '${value}'" ];
+        RunAtLoad = true;
+      };
+    }
+  ) secrets;
 }

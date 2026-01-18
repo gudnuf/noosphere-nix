@@ -22,7 +22,9 @@ flake.nix              # Entry point, defines inputs & system builders
 ├── home/
 │   ├── default.nix    # Home Manager entry point
 │   └── modules/       # shell, git, dev-tools, skills
-└── skills/            # Local Claude Code skills (syncs to ~/.claude/skills/)
+├── skills/            # Local Claude Code skills (syncs to ~/.claude/skills/)
+├── secrets.nix        # Your secrets (git-ignored, not committed)
+└── secrets.nix.template  # Template for secrets file
 ```
 
 ## Common Commands
@@ -81,6 +83,63 @@ skills.enable = [
 3. Stage with `git add skills/`
 
 Skills sync to `~/.claude/skills/` on rebuild.
+
+### Secrets Management
+
+Sensitive data (API tokens, credentials) are stored in `secrets.nix`, which is git-ignored and never committed.
+
+**File structure:**
+```
+secrets.nix.template    # Template showing the format
+secrets.nix            # Your actual secrets (git-ignored)
+```
+
+**Setup:**
+1. Copy template: `cp secrets.nix.template secrets.nix`
+2. Add your secrets:
+   ```nix
+   {
+     GITHUB_PERSONAL_ACCESS_TOKEN = "ghp_your_token";
+     API_KEY = "your_key";
+   }
+   ```
+3. Rebuild: `nrs`
+
+**How it works:**
+
+| Environment | Method | Availability |
+|-------------|--------|--------------|
+| Shell sessions | `home.sessionVariables` | Terminal, scripts |
+| GUI apps (Claude Code, etc.) | launchd agent | All applications |
+
+**Implementation** (`home/default.nix`):
+- Conditionally imports `secrets.nix` if it exists
+- Merges secrets into `home.sessionVariables` for shell access
+- Uses launchd agent to set environment variables for GUI apps
+
+**For GUI apps on macOS:**
+
+A launchd agent (`~/Library/LaunchAgents/com.user.setenv.plist`) runs at login to make secrets available to GUI applications like Claude Code. This is required because macOS GUI apps don't inherit shell environment variables.
+
+**Manual launchd setup** (if needed):
+```bash
+# Set immediately (current session)
+launchctl setenv GITHUB_PERSONAL_ACCESS_TOKEN "your_token"
+
+# Verify
+launchctl getenv GITHUB_PERSONAL_ACCESS_TOKEN
+```
+
+**Adding new secrets:**
+1. Edit `secrets.nix` with new key-value pairs
+2. Update `~/Library/LaunchAgents/com.user.setenv.plist` with new variables
+3. Reload: `launchctl unload ~/Library/LaunchAgents/com.user.setenv.plist && launchctl load ~/Library/LaunchAgents/com.user.setenv.plist`
+4. Restart affected GUI apps
+
+**Security notes:**
+- `secrets.nix` is in `.gitignore` - never committed
+- `secrets.nix.template` shows structure without real values
+- If `secrets.nix` is missing, config still works (empty set)
 
 ## Adding Packages
 
