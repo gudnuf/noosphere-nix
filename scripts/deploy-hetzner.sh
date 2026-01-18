@@ -110,10 +110,10 @@ check_flake_config() {
     local hostname="$1"
     log_info "Checking flake configuration for '$hostname'..."
 
-    if ! nix flake show "$FLAKE_DIR" 2>/dev/null | grep -q "nixosConfigurations.*$hostname"; then
+    if ! nix flake show "$FLAKE_DIR" 2>/dev/null | grep -w "$hostname" &>/dev/null; then
         log_error "No NixOS configuration found for '$hostname' in flake.nix"
         log_info "Available configurations:"
-        nix flake show "$FLAKE_DIR" 2>/dev/null | grep -A 100 "nixosConfigurations" | head -20
+        nix flake show "$FLAKE_DIR" 2>/dev/null | grep -E "(hetzner|nixos-vm|noosphere)"
         exit 1
     fi
     log_success "Configuration exists"
