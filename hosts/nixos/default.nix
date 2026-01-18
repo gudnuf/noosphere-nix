@@ -2,7 +2,7 @@
 
 let
   # Cloud VMs use disko for filesystem management
-  cloudVMs = [ "noosphere" "mynymbox" ];
+  cloudVMs = [ "noosphere" "hetzner" ];
   isCloudVM = builtins.elem hostname cloudVMs;
 in
 {

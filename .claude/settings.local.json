@@ -10,7 +10,11 @@
       "Bash(nix --extra-experimental-features 'nix-command flakes' flake check:*)",
       "Bash(git commit:*)",
       "WebSearch",
-      "Bash(/opt/homebrew/bin/brew uninstall --cask utm --force)"
+      "Bash(/opt/homebrew/bin/brew uninstall --cask utm --force)",
+      "Bash(lazygit:*)",
+      "Bash(delta:*)",
+      "Bash(chmod:*)",
+      "Bash(hcloud version:*)"
     ]
   }
 }

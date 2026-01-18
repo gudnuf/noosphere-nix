@@ -43,6 +43,9 @@
 
     # AI tools
     claude-code  # Claude Code CLI
+
+    # Cloud deployment
+    hcloud       # Hetzner Cloud CLI
   ];
 
   # direnv - per-directory environments

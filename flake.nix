@@ -92,8 +92,28 @@
           ./modules/nixos/disko.nix
         ] else []);
       };
+      # Helper to create flake apps
+      forAllSystems = nixpkgs.lib.genAttrs [ "x86_64-linux" "aarch64-linux" "aarch64-darwin" "x86_64-darwin" ];
     in
     {
+      # Deployment apps
+      apps = forAllSystems (system:
+        let
+          pkgs = nixpkgs.legacyPackages.${system};
+          deploy-hetzner = pkgs.writeShellApplication {
+            name = "deploy-hetzner";
+            runtimeInputs = with pkgs; [ hcloud nixos-anywhere openssh ];
+            text = builtins.readFile ./scripts/deploy-hetzner.sh;
+          };
+        in
+        {
+          deploy-hetzner = {
+            type = "app";
+            program = "${deploy-hetzner}/bin/deploy-hetzner";
+          };
+        }
+      );
+
       # macOS configuration
       darwinConfigurations = {
         nous = mkDarwinSystem {
@@ -115,9 +135,9 @@
           hostname = "noosphere";
           enableDisko = true;
         };
-        mynymbox = mkNixOSSystem {
+        hetzner = mkNixOSSystem {
           system = "x86_64-linux";
-          hostname = "mynymbox";
+          hostname = "hetzner";
           enableDisko = true;
         };
       };
