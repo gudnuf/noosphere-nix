@@ -1,107 +1,71 @@
 # CLAUDE.hetzner.md
 
-**Host:** hetzner (NixOS Cloud VM - x86_64)
+**Host:** hetzner (NixOS on Hetzner Cloud)
 **User:** claude
-**Config Location:** `~/.config/nix-config`
-**System Manager:** NixOS + Home Manager + disko
-**Provider:** Hetzner Cloud
+**Config Location:** Deployed from `~/.config/nix-config` on nous
+**System Manager:** NixOS with Home Manager
 
-## Status
+## Server Details
 
-This is a Hetzner Cloud VM deployed via `nixos-anywhere`. Deploy with:
+| Property | Value |
+|----------|-------|
+| Provider | Hetzner Cloud |
+| Server Type | cx23 (2 vCPU, 4GB RAM, 40GB disk) |
+| Location | hel1 (Helsinki) |
+| IPv4 | 77.42.27.244 |
+| IPv6 | 2a01:4f9:c013:57df::1 |
+| OS | NixOS 24.11 |
 
-```bash
-nix run .#deploy-hetzner -- hetzner --create
-```
-
-## How You're Running
-
-You (Claude Code) will run on this machine as:
-- **Binary:** `claude-code` installed via Nix
-- **Shell:** zsh (configured via Home Manager)
-- **Skills:** Managed declaratively via `agent-skills-nix` in `home/modules/skills.nix`
-  - Skills sync from nix-config to `~/.claude/skills/` on rebuild
-
-## Modifying Global State
-
-All system configuration is declarative via NixOS. To modify this machine:
-
-### 1. Edit Configuration Files
-
-Choose the appropriate file based on what you're changing:
-
-| What to Change | File | Examples |
-|----------------|------|----------|
-| System packages | `modules/nixos/default.nix` | System-wide packages |
-| User CLI tools | `home/modules/dev-tools.nix` | ripgrep, fd, jq, claude-code |
-| Shell config | `home/modules/shell.nix` | aliases, zsh settings, starship |
-| Git config | `home/modules/git.nix` | git aliases, user settings |
-| Skills | `home/modules/skills.nix` | Claude Code skills to enable |
-| NixOS settings | `hosts/nixos/default.nix` | System-wide NixOS configuration |
-| Disk layout | `modules/nixos/disko.nix` | Disk partitioning (disko enabled) |
-| Secrets/tokens | `secrets.nix` | API keys, credentials (git-ignored) |
-
-### 2. Apply Changes
+## SSH Access
 
 ```bash
-nrs  # Alias for: sudo nixos-rebuild switch --flake ~/.config/nix-config#hetzner
+ssh claude@77.42.27.244
+ssh root@77.42.27.244
 ```
-
-### 3. Rollback (if needed)
-
-```bash
-nixos-rebuild --list-generations
-sudo /nix/var/nix/profiles/system-N-link/bin/switch-to-configuration switch
-```
-
-## System Architecture
-
-### Configuration Layers (Load Order)
-
-1. **Flake** (`flake.nix`) - Defines inputs, outputs, and system builder
-2. **Host** (`hosts/nixos/default.nix`) - Hostname, user, system settings
-3. **Shared** (`modules/shared/default.nix`) - Cross-platform settings
-4. **NixOS** (`modules/nixos/default.nix`) - System packages, services
-5. **Disko** (`modules/nixos/disko.nix`) - Disk partitioning and formatting
-6. **Home Manager** (`home/default.nix`) - User-level packages and dotfiles
 
 ## Deployment
 
-### Create New Server
+This server is deployed from the local nix-config on nous (macOS).
+
+### Deploy Configuration
 
 ```bash
-# Full deployment (creates server + installs NixOS)
-nix run .#deploy-hetzner -- hetzner --create
-
-# With custom options
-nix run .#deploy-hetzner -- hetzner --create --server-type cx32 --location nbg1
+cd ~/.config/nix-config
+nix run .#deploy-hetzner
 ```
 
-### Redeploy Existing Server
+Or manually:
 
 ```bash
-nix run .#deploy-hetzner -- hetzner
+nixos-rebuild switch \
+  --flake ~/.config/nix-config#hetzner \
+  --target-host root@77.42.27.244 \
+  --build-host root@77.42.27.244 \
+  --use-remote-sudo
 ```
 
-### Server Management
+### Check Current Version
 
 ```bash
-# Requires HCLOUD_TOKEN environment variable
-hcloud server list                    # List all servers
-hcloud server describe hetzner        # Server details
-hcloud server delete hetzner          # Delete server
+ssh root@77.42.27.244 "nixos-version"
 ```
+
+## Configuration Files
+
+| What | Location |
+|------|----------|
+| Host config | `hosts/hetzner/default.nix` |
+| Hardware | `hosts/hetzner/hardware-configuration.nix` |
+| Networking | `hosts/hetzner/networking.nix` |
+| NixOS modules | `modules/nixos/` |
+| Home Manager | `home/` |
+
+## Installed Packages
+
+Same as other NixOS hosts - see `modules/nixos/default.nix` and `home/modules/dev-tools.nix`.
 
 ## Notes
 
-This is a cloud VM with disko enabled for declarative disk management. The disk configuration in `modules/nixos/disko.nix` targets `/dev/sda` which is standard for Hetzner Cloud servers.
-
-**Use the `/update-host-context` skill** for guidance on maintaining this host-specific context file.
-
-## Related Files
-
-- `CLAUDE.md` - General nix-config structure and patterns (repo-wide)
-- `CLAUDE.nous.md` - macOS host configuration for reference
-- `SECRETS.md` - Secrets management documentation
-- `scripts/deploy-hetzner.sh` - Deployment script source
-- `skills/update-host-context/SKILL.md` - Skill for maintaining host-specific context
+- Server was set up using nixos-infect from Debian 12
+- Uses GRUB bootloader (BIOS, not UEFI)
+- Static networking configured for Hetzner Cloud

@@ -92,31 +92,37 @@
           ./modules/nixos/disko.nix
         ] else []);
       };
-      # Helper to create flake apps
-      forAllSystems = nixpkgs.lib.genAttrs [ "x86_64-linux" "aarch64-linux" "aarch64-darwin" "x86_64-darwin" ];
+
+      # Helper to create Hetzner cloud systems
+      mkHetznerSystem = { hostname, targetHost }: nixpkgs.lib.nixosSystem {
+        system = "x86_64-linux";
+        specialArgs = { inherit inputs username hostname; };
+        modules = [
+          ./hosts/hetzner
+          ./modules/shared
+          ./modules/nixos
+          home-manager.nixosModules.home-manager
+          {
+            home-manager = {
+              useGlobalPkgs = true;
+              useUserPackages = true;
+              extraSpecialArgs = { inherit inputs username hostname; };
+              users.${username} = {
+                imports = [
+                  (import ./home)
+                  agent-skills.homeManagerModules.default
+                ];
+              };
+            };
+          }
+        ];
+      };
+
+      # Package sets for apps
+      pkgsX86 = import nixpkgs { system = "x86_64-linux"; };
+      pkgsDarwin = import nixpkgs { system = "aarch64-darwin"; };
     in
     {
-      # Deployment apps
-      apps = forAllSystems (system:
-        let
-          pkgs = nixpkgs.legacyPackages.${system};
-          deploy-hetzner = pkgs.writeShellApplication {
-            name = "deploy-hetzner";
-            runtimeInputs = with pkgs; [ hcloud nixos-anywhere openssh ];
-            text = ''
-              export FLAKE_DIR="${self}"
-              ${builtins.readFile ./scripts/deploy-hetzner.sh}
-            '';
-          };
-        in
-        {
-          deploy-hetzner = {
-            type = "app";
-            program = "${deploy-hetzner}/bin/deploy-hetzner";
-          };
-        }
-      );
-
       # macOS configuration
       darwinConfigurations = {
         nous = mkDarwinSystem {
@@ -138,11 +144,53 @@
           hostname = "noosphere";
           enableDisko = true;
         };
-        hetzner = mkNixOSSystem {
+        mynymbox = mkNixOSSystem {
           system = "x86_64-linux";
-          hostname = "hetzner";
+          hostname = "mynymbox";
           enableDisko = true;
         };
+        # Hetzner Cloud
+        hetzner = mkHetznerSystem {
+          hostname = "hetzner";
+          targetHost = "77.42.27.244";
+        };
+      };
+
+      # Deploy apps
+      apps.aarch64-darwin.deploy-hetzner = {
+        type = "app";
+        program = toString (pkgsDarwin.writeShellScript "deploy-hetzner" ''
+          set -euo pipefail
+
+          TARGET_IP="77.42.27.244"
+          TARGET_USER="claude"
+          TARGET_HOST="$TARGET_USER@$TARGET_IP"
+          FLAKE_DIR="''${FLAKE_DIR:-$(pwd)}"
+
+          echo "Deploying NixOS configuration to Hetzner server..."
+          echo "Target: $TARGET_HOST"
+          echo "Flake: $FLAKE_DIR#hetzner"
+          echo ""
+
+          # Copy flake to remote and build there
+          echo "Step 1: Copying flake to remote server..."
+          ${pkgsDarwin.rsync}/bin/rsync -avz --delete \
+            --exclude='.git' \
+            --exclude='.trees' \
+            --exclude='result' \
+            -e "ssh -o StrictHostKeyChecking=no" \
+            "$FLAKE_DIR/" "$TARGET_HOST:/tmp/nixos-config/"
+
+          echo ""
+          echo "Step 2: Building and switching on remote (via sudo)..."
+          ssh -o StrictHostKeyChecking=no "$TARGET_HOST" \
+            "sudo cp -r /tmp/nixos-config /etc/nixos-config && sudo chown -R root:root /etc/nixos-config && sudo nixos-rebuild switch --flake /etc/nixos-config#hetzner"
+
+          echo ""
+          echo "Deployment complete!"
+          echo "NixOS version:"
+          ssh -o StrictHostKeyChecking=no "$TARGET_HOST" "nixos-version"
+        '');
       };
     };
 }
