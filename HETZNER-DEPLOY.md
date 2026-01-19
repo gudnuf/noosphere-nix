@@ -81,8 +81,43 @@ $ ssh root@77.42.27.244 "nixos-version && uname -a"
 Linux nixos-vm 6.6.94 #1-NixOS SMP PREEMPT_DYNAMIC Thu Jun 19 13:28:47 UTC 2025 x86_64 GNU/Linux
 ```
 
+## Deploy Custom Configuration
+
+### Quick Deploy
+
+```bash
+cd ~/.config/nix-config/.trees/nixos-infect
+nix run .#deploy-hetzner
+```
+
+### Manual Deploy
+
+```bash
+nixos-rebuild switch \
+  --flake ~/.config/nix-config/.trees/nixos-infect#hetzner \
+  --target-host root@77.42.27.244 \
+  --build-host root@77.42.27.244 \
+  --use-remote-sudo
+```
+
+## Flake Configuration
+
+The flake now includes:
+- `nixosConfigurations.hetzner` - NixOS configuration for this server
+- `apps.aarch64-darwin.deploy-hetzner` - Deploy script
+
+### Key Files
+
+| File | Purpose |
+|------|---------|
+| `hosts/hetzner/default.nix` | Host configuration |
+| `hosts/hetzner/hardware-configuration.nix` | Hardware/bootloader |
+| `hosts/hetzner/networking.nix` | Static IP networking |
+| `CLAUDE.hetzner.md` | Host-specific documentation |
+
 ## Next Steps
 
 1. ~~Wait for server to reboot~~ ✓
 2. ~~Verify NixOS is running~~ ✓
-3. Deploy custom NixOS configuration from this repo (optional)
+3. ~~Add flake configuration~~ ✓
+4. Deploy custom configuration: `nix run .#deploy-hetzner`

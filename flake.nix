@@ -92,6 +92,35 @@
           ./modules/nixos/disko.nix
         ] else []);
       };
+
+      # Helper to create Hetzner cloud systems
+      mkHetznerSystem = { hostname, targetHost }: nixpkgs.lib.nixosSystem {
+        system = "x86_64-linux";
+        specialArgs = { inherit inputs username hostname; };
+        modules = [
+          ./hosts/hetzner
+          ./modules/shared
+          ./modules/nixos
+          home-manager.nixosModules.home-manager
+          {
+            home-manager = {
+              useGlobalPkgs = true;
+              useUserPackages = true;
+              extraSpecialArgs = { inherit inputs username hostname; };
+              users.${username} = {
+                imports = [
+                  (import ./home)
+                  agent-skills.homeManagerModules.default
+                ];
+              };
+            };
+          }
+        ];
+      };
+
+      # Package sets for apps
+      pkgsX86 = import nixpkgs { system = "x86_64-linux"; };
+      pkgsDarwin = import nixpkgs { system = "aarch64-darwin"; };
     in
     {
       # macOS configuration
@@ -120,6 +149,39 @@
           hostname = "mynymbox";
           enableDisko = true;
         };
+        # Hetzner Cloud
+        hetzner = mkHetznerSystem {
+          hostname = "hetzner";
+          targetHost = "77.42.27.244";
+        };
+      };
+
+      # Deploy apps
+      apps.aarch64-darwin.deploy-hetzner = {
+        type = "app";
+        program = toString (pkgsDarwin.writeShellScript "deploy-hetzner" ''
+          set -euo pipefail
+
+          TARGET_HOST="root@77.42.27.244"
+          FLAKE_DIR="''${FLAKE_DIR:-$(pwd)}"
+
+          echo "Deploying NixOS configuration to Hetzner server..."
+          echo "Target: $TARGET_HOST"
+          echo "Flake: $FLAKE_DIR#hetzner"
+          echo ""
+
+          # Build and deploy using nixos-rebuild
+          NIX_SSHOPTS="-o StrictHostKeyChecking=no" \
+            nixos-rebuild switch \
+            --flake "$FLAKE_DIR#hetzner" \
+            --target-host "$TARGET_HOST" \
+            --build-host "$TARGET_HOST" \
+            --use-remote-sudo
+
+          echo ""
+          echo "Deployment complete!"
+          ssh -o StrictHostKeyChecking=no "$TARGET_HOST" "nixos-version"
+        '');
       };
     };
 }
