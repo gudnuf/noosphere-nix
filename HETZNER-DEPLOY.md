@@ -25,6 +25,14 @@
 
 **Note:** Root SSH login is disabled. Use the `claude` user with passwordless sudo.
 
+## User Credentials
+
+| User | Password |
+|------|----------|
+| claude | `claude2025hetzner` |
+
+Password is set declaratively in `hosts/hetzner/default.nix`. Use for console login or sudo.
+
 ## Hetzner API
 
 | Property | Value |
