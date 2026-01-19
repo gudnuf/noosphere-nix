@@ -1,20 +1,23 @@
 { lib, ... }:
 
 {
-  # Simple DHCP-based networking for cloud VMs
-  networking.useDHCP = lib.mkDefault true;
+  # Use systemd-networkd
+  networking.useNetworkd = true;
+  systemd.network.enable = true;
 
-  # Explicitly enable DHCP for common cloud interface names
-  networking.interfaces = {
-    eth0.useDHCP = lib.mkDefault true;
-    eth1.useDHCP = lib.mkDefault true;
-    ens0.useDHCP = lib.mkDefault true;
-    ens1.useDHCP = lib.mkDefault true;
+  # Match all ethernet interfaces and enable DHCP
+  systemd.network.networks."10-lan" = {
+    matchConfig.Name = "en* eth*";
+    networkConfig = {
+      DHCP = "yes";
+      IPv6AcceptRA = true;
+    };
+    linkConfig.RequiredForOnline = "routable";
   };
 
   # IPv6 support
   networking.enableIPv6 = true;
 
-  # DNS servers
+  # DNS servers as fallback
   networking.nameservers = lib.mkDefault [ "8.8.8.8" "1.1.1.1" ];
 }

@@ -26,7 +26,20 @@
       "Bash(hcloud server request-console:*)",
       "Bash(jobs)",
       "Bash(wait)",
-      "Bash(echo:*)"
+      "Bash(echo:*)",
+      "Bash(hcloud server delete:*)",
+      "Bash(ssh-keygen:*)",
+      "Bash(ping:*)",
+      "Bash(hcloud server enable-rescue:*)",
+      "Bash(hcloud server reboot:*)",
+      "Bash(hcloud server poweroff:*)",
+      "Bash(hcloud server poweron:*)",
+      "Bash(hcloud server:*)",
+      "Bash(git worktree:*)",
+      "Bash(hcloud context:*)",
+      "Bash(hcloud image:*)",
+      "Bash(hcloud ssh-key:*)",
+      "Bash(hcloud server-type:*)"
     ]
   }
 }
