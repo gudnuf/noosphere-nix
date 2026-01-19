@@ -102,7 +102,7 @@ secrets.nix            # Your actual secrets (git-ignored, NEVER committed)
    ```nix
    {
      # GitHub Personal Access Token for Claude Code MCP
-     GITHUB_PERSONAL_ACCESS_TOKEN = "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";
+     GITHUB_PERSONAL_ACCESS_TOKEN = "ghp_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx";
 
      # OpenAI API key
      OPENAI_API_KEY = "sk-proj-your-key-here";
