@@ -20,8 +20,10 @@
 | SSH Key Name | `claude@nous` |
 | SSH Key ID | `105867923` |
 | SSH Key Path | `~/.ssh/id_ed25519_github` |
-| SSH User | `root` |
-| SSH Command | `ssh root@77.42.27.244` |
+| SSH User | `claude` (root login disabled for security) |
+| SSH Command | `ssh claude@77.42.27.244` |
+
+**Note:** Root SSH login is disabled. Use the `claude` user with passwordless sudo.
 
 ## Hetzner API
 
@@ -120,4 +122,17 @@ The flake now includes:
 1. ~~Wait for server to reboot~~ ✓
 2. ~~Verify NixOS is running~~ ✓
 3. ~~Add flake configuration~~ ✓
-4. Deploy custom configuration: `nix run .#deploy-hetzner`
+4. ~~Deploy custom configuration~~ ✓
+
+## Completed Deployment
+
+```
+$ ssh claude@77.42.27.244 "nixos-version && hostname"
+26.05.20260116.be5afa0 (Yarara)
+hetzner
+```
+
+The server is now running the full nix-config with:
+- Home Manager (zsh, neovim, starship, dev tools)
+- SSH hardening (fail2ban, no root login)
+- Firewall (only SSH/mosh open)

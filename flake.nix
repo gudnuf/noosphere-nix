@@ -162,7 +162,9 @@
         program = toString (pkgsDarwin.writeShellScript "deploy-hetzner" ''
           set -euo pipefail
 
-          TARGET_HOST="root@77.42.27.244"
+          TARGET_IP="77.42.27.244"
+          TARGET_USER="claude"
+          TARGET_HOST="$TARGET_USER@$TARGET_IP"
           FLAKE_DIR="''${FLAKE_DIR:-$(pwd)}"
 
           echo "Deploying NixOS configuration to Hetzner server..."
@@ -170,16 +172,23 @@
           echo "Flake: $FLAKE_DIR#hetzner"
           echo ""
 
-          # Build and deploy using nixos-rebuild
-          NIX_SSHOPTS="-o StrictHostKeyChecking=no" \
-            nixos-rebuild switch \
-            --flake "$FLAKE_DIR#hetzner" \
-            --target-host "$TARGET_HOST" \
-            --build-host "$TARGET_HOST" \
-            --use-remote-sudo
+          # Copy flake to remote and build there
+          echo "Step 1: Copying flake to remote server..."
+          ${pkgsDarwin.rsync}/bin/rsync -avz --delete \
+            --exclude='.git' \
+            --exclude='.trees' \
+            --exclude='result' \
+            -e "ssh -o StrictHostKeyChecking=no" \
+            "$FLAKE_DIR/" "$TARGET_HOST:/tmp/nixos-config/"
+
+          echo ""
+          echo "Step 2: Building and switching on remote (via sudo)..."
+          ssh -o StrictHostKeyChecking=no "$TARGET_HOST" \
+            "sudo cp -r /tmp/nixos-config /etc/nixos-config && sudo chown -R root:root /etc/nixos-config && sudo nixos-rebuild switch --flake /etc/nixos-config#hetzner"
 
           echo ""
           echo "Deployment complete!"
+          echo "NixOS version:"
           ssh -o StrictHostKeyChecking=no "$TARGET_HOST" "nixos-version"
         '');
       };
