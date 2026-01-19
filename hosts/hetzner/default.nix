@@ -19,6 +19,9 @@
   # Clean tmp on boot
   boot.tmp.cleanOnBoot = true;
 
+  # Make passwords declarative (required for hashedPassword to apply)
+  users.mutableUsers = false;
+
   # User configuration
   users.users.${username} = {
     isNormalUser = true;
