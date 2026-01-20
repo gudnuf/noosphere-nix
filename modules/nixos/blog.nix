@@ -1,5 +1,4 @@
 # Blog service configuration
-# Note: The blog's nixosModule is imported in flake.nix mkHetznerSystem
 { config, lib, pkgs, inputs, ... }:
 
 let
@@ -7,6 +6,7 @@ let
   blogPkg = inputs.the-blog.packages.${pkgs.system}.default;
 in
 {
+  imports = [ inputs.the-blog.nixosModules.default ];
   options.services.blog = {
     enable = lib.mkEnableOption "the blog";
 

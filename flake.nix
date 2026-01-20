@@ -33,6 +33,11 @@
       url = "github:nix-community/disko";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    the-blog = {
+      url = "git+file:///home/claude/the-blog";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs = inputs@{ self, nixpkgs, nix-darwin, home-manager, claude-code, agent-skills, anthropic-skills, ... }:

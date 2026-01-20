@@ -1,9 +1,10 @@
-{ lib, pkgs, hostname, username, ... }:
+{ lib, pkgs, hostname, username, inputs, ... }:
 
 {
   imports = [
     ./hardware-configuration.nix
     ./networking.nix
+    ../../modules/nixos/blog.nix
   ];
 
   # Hostname
@@ -49,4 +50,10 @@
 
   # System state version
   system.stateVersion = "24.11";
+
+  # Blog service configuration
+  services.blog = {
+    enable = true;
+    port = 3311;
+  };
 }
