@@ -43,7 +43,10 @@
       "Bash(mdfind:*)",
       "Bash(brew info:*)",
       "Bash(/opt/homebrew/bin/brew info:*)",
-      "Bash(/opt/homebrew/bin/brew reinstall:*)"
+      "Bash(/opt/homebrew/bin/brew reinstall:*)",
+      "WebFetch(domain:trezor.io)",
+      "Bash(nix search:*)",
+      "Bash(GNUPGHOME=\"$HOME/.gnupg/trezor\" gpg --list-keys:*)"
     ]
   }
 }

@@ -1,4 +1,4 @@
-{ pkgs, hostname, ... }:
+{ pkgs, lib, hostname, ... }:
 
 let
   rebuildCmd = if pkgs.stdenv.isDarwin then "darwin-rebuild" else "nixos-rebuild";
@@ -73,6 +73,10 @@ in
 
       # Initialize zoxide
       eval "$(zoxide init zsh)"
+    '' + lib.optionalString pkgs.stdenv.isDarwin ''
+
+      # Trezor GPG - use hardware-backed keys
+      export GNUPGHOME="$HOME/.gnupg/trezor"
     '';
   };
 

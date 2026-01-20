@@ -36,7 +36,10 @@ in
   home.sessionVariables = {
     EDITOR = "nvim";
     VISUAL = "nvim";
-  } // secrets;
+  } // (lib.optionalAttrs pkgs.stdenv.isDarwin {
+    # Trezor GPG - use hardware-backed keys (Darwin only)
+    GNUPGHOME = "$HOME/.gnupg/trezor";
+  }) // secrets;
 
   # Set secrets in launchd environment for GUI apps on macOS
   launchd.agents = lib.mkIf pkgs.stdenv.isDarwin (lib.mapAttrs' (name: value:

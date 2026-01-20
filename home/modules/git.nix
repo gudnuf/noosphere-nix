@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs, lib, ... }:
 
 {
   programs.git = {
@@ -6,8 +6,8 @@
 
     # Core settings using settings attribute
     settings = {
-      user.name = "claude";
-      user.email = "claude@example.com";
+      user.name = "gudnuf";
+      user.email = "gudnuf21@proton.me";
 
       init.defaultBranch = "main";
       pull.rebase = true;
@@ -57,7 +57,14 @@
         undo = "reset --soft HEAD~1";
         stash-all = "stash save --include-untracked";
       };
+    } // lib.optionalAttrs pkgs.stdenv.isDarwin {
+      # GPG signing with Trezor (Darwin only)
+      commit.gpgsign = true;
+      tag.gpgsign = true;
     };
+
+    # Signing key (Darwin only, set separately to avoid shallow merge overwriting user.name/email)
+    signing.key = lib.mkIf pkgs.stdenv.isDarwin "AAB2747B26A60F0F";
 
     # Ignore patterns
     ignores = [

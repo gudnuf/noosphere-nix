@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs, lib, ... }:
 
 {
   # Development tools
@@ -48,6 +48,10 @@
 
     # Cloud deployment
     hcloud       # Hetzner Cloud CLI
+  ] ++ lib.optionals pkgs.stdenv.isDarwin [
+    # Hardware security (Darwin only)
+    gnupg        # GPG for signing
+    trezor-agent # Trezor GPG/SSH agent
   ];
 
   # direnv - per-directory environments
