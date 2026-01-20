@@ -51,9 +51,48 @@
   # System state version
   system.stateVersion = "24.11";
 
-  # Blog service configuration
+  # =============================================================================
+  # SSL / HTTPS Configuration
+  # =============================================================================
+  # Uncomment and configure once you have a domain pointing to this server.
+  #
+  # DNS Setup required:
+  #   A record: @           -> 77.42.27.244
+  #   A record: blog        -> 77.42.27.244
+  #   A record: dev         -> 77.42.27.244
+  #   (or use a wildcard:  *.yourdomain.com -> 77.42.27.244)
+  #
+  # services.ssl = {
+  #   enable = true;
+  #   email = "your-email@example.com";  # For Let's Encrypt notifications
+  #   domain = "yourdomain.com";
+  # };
+
+  # =============================================================================
+  # Blog Service
+  # =============================================================================
   services.blog = {
     enable = true;
     port = 3311;
+    # Uncomment when SSL is enabled:
+    # domain = "blog.yourdomain.com";  # or just "yourdomain.com" for root
   };
+
+  # =============================================================================
+  # Development Proxy (port-based routing)
+  # =============================================================================
+  # Access localhost services via https://dev.yourdomain.com/PORT/path
+  # Example: https://dev.yourdomain.com/5173/ -> localhost:5173
+  #
+  # Uncomment when SSL is enabled:
+  # services.devProxy = {
+  #   enable = true;
+  #   domain = "dev.yourdomain.com";
+  #   allowedPorts = [ 3000 3001 4000 5000 5173 8000 8080 8888 ];
+  #   # Optional: require password for dev proxy
+  #   # basicAuth = {
+  #   #   enable = true;
+  #   #   htpasswdFile = "/etc/nginx/.htpasswd-dev";
+  #   # };
+  # };
 }
