@@ -39,7 +39,11 @@
       "Bash(hcloud context:*)",
       "Bash(hcloud image:*)",
       "Bash(hcloud ssh-key:*)",
-      "Bash(hcloud server-type:*)"
+      "Bash(hcloud server-type:*)",
+      "Bash(mdfind:*)",
+      "Bash(brew info:*)",
+      "Bash(/opt/homebrew/bin/brew info:*)",
+      "Bash(/opt/homebrew/bin/brew reinstall:*)"
     ]
   }
 }

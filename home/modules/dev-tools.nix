@@ -19,6 +19,7 @@
     curl
     wget
     httpie       # HTTP client
+    mosh         # Mobile shell (SSH alternative)
 
     # Process management
     htop         # Process viewer
@@ -33,6 +34,7 @@
     nixfmt      # Nix formatter
     nil         # Nix LSP
     nix-tree    # Visualize nix dependencies
+    devenv      # Developer environments
 
     # Development
     gnumake
@@ -53,6 +55,7 @@
     enable = true;
     enableZshIntegration = true;
     nix-direnv.enable = true;
+    config.global.hide_env_diff = true;
   };
 
   # tmux - terminal multiplexer with deep blue theme
