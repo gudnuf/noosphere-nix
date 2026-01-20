@@ -271,11 +271,11 @@
         "rust-overlay": "rust-overlay"
       },
       "locked": {
-        "lastModified": 1768869508,
-        "narHash": "sha256-mlN22XJDbKgYa71+Gh4feJser2DHGoOBr7ivdJXyHWo=",
+        "lastModified": 1768889046,
+        "narHash": "sha256-uzuKnNpznCVcFjJK4vnMniarT2uHa15Bgu/OGgyPb74=",
         "ref": "refs/heads/master",
-        "rev": "ea2a78d4072fca5cf83a659a5c3b8437a0a596a5",
-        "revCount": 15,
+        "rev": "a6756cce6e1d2220c3c9303c2ae700955f229b0f",
+        "revCount": 20,
         "type": "git",
         "url": "file:///home/claude/the-blog"
       },
