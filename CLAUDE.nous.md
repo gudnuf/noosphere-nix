@@ -264,6 +264,10 @@ nixfmt **/*.nix  # Format all Nix files
 nix-collect-garbage -d  # Delete old system generations
 ```
 
+### Git Commit Style
+
+**Do NOT add `Co-Authored-By` footers to commit messages.** Keep commits clean and simple.
+
 ## How to Update This File
 
 This file should be updated whenever:

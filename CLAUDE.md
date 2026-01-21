@@ -161,6 +161,8 @@ git commit -m "action: brief description"
 
 **Common actions:** `add`, `remove`, `update`, `fix`, `enable`, `disable`, `refactor`
 
+**Commit message style:** Do NOT add `Co-Authored-By` footers to commit messages. Keep commits clean and simple.
+
 ## Important Constraints
 
 | Setting | Value | Location |

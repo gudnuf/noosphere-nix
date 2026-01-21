@@ -66,6 +66,8 @@ Same as other NixOS hosts - see `modules/nixos/default.nix` and `home/modules/de
 
 ## Notes
 
+**Git commit style:** Do NOT add `Co-Authored-By` footers to commit messages. Keep commits clean and simple.
+
 - Server was set up using nixos-infect from Debian 12
 - Uses GRUB bootloader (BIOS, not UEFI)
 - Static networking configured for Hetzner Cloud

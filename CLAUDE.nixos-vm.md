@@ -60,6 +60,8 @@ sudo /nix/var/nix/profiles/system-N-link/bin/switch-to-configuration switch
 
 ## Notes
 
+**Git commit style:** Do NOT add `Co-Authored-By` footers to commit messages. Keep commits clean and simple.
+
 This file should be updated when the NixOS VM is fully configured.
 
 **Use the `/update-host-context` skill** for guidance on maintaining this host-specific context file.
