@@ -12,6 +12,12 @@
   nix = {
     # NixOS-specific GC timing
     gc.dates = "weekly";
+
+    # Enable flakes and new nix commands
+    settings.experimental-features = [
+      "nix-command"
+      "flakes"
+    ];
   };
 
   # System packages available to all users
