@@ -7,6 +7,9 @@
     ./mosh.nix
     ./firewall.nix
     ./vm-guest.nix
+    ./ssl.nix
+    ./dev-proxy.nix
+    ./nextjs-dev.nix
   ];
   # NixOS-specific Nix configuration
   nix = {
