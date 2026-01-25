@@ -39,9 +39,14 @@
     # Development
     gnumake
     cmake
+    bun          # Fast JavaScript runtime and package manager
 
     # Git tools
     lazygit      # Git TUI
+
+    # File watching (great for monitoring Claude Code changes)
+    watchexec    # Run commands on file changes
+    entr         # Simpler alternative for piped workflows
 
     # AI tools
     claude-code  # Claude Code CLI
@@ -50,8 +55,8 @@
     hcloud       # Hetzner Cloud CLI
   ] ++ lib.optionals pkgs.stdenv.isDarwin [
     # Hardware security (Darwin only)
-    gnupg        # GPG for signing
-    trezor-agent # Trezor GPG/SSH agent
+    openssh      # OpenSSH with FIDO2 support (system SSH lacks libfido2)
+    libfido2     # FIDO2 library for security key support
   ];
 
   # direnv - per-directory environments
