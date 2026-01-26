@@ -38,9 +38,14 @@
       url = "git+file:///home/claude/the-blog";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    nous = {
+      url = "git+file:///Users/claude/nous?ref=nix-build";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
-  outputs = inputs@{ self, nixpkgs, nix-darwin, home-manager, claude-code, agent-skills, anthropic-skills, ... }:
+  outputs = inputs@{ self, nixpkgs, nix-darwin, home-manager, claude-code, agent-skills, anthropic-skills, nous, ... }:
     let
       username = "claude";
 
@@ -54,7 +59,7 @@
           ./modules/darwin
           home-manager.darwinModules.home-manager
           {
-            nixpkgs.overlays = [ claude-code.overlays.default ];
+            nixpkgs.overlays = [ claude-code.overlays.default nous.overlays.default ];
             home-manager = {
               useGlobalPkgs = true;
               useUserPackages = true;
@@ -63,6 +68,7 @@
                 imports = [
                   (import ./home)
                   agent-skills.homeManagerModules.default
+                  nous.homeManagerModules.default
                 ];
               };
             };
@@ -80,6 +86,7 @@
           ./modules/nixos
           home-manager.nixosModules.home-manager
           {
+            nixpkgs.overlays = [ claude-code.overlays.default nous.overlays.default ];
             home-manager = {
               useGlobalPkgs = true;
               useUserPackages = true;
@@ -88,6 +95,7 @@
                 imports = [
                   (import ./home)
                   agent-skills.homeManagerModules.default
+                  nous.homeManagerModules.default
                 ];
               };
             };
@@ -108,6 +116,7 @@
           ./modules/nixos
           home-manager.nixosModules.home-manager
           {
+            nixpkgs.overlays = [ claude-code.overlays.default nous.overlays.default ];
             home-manager = {
               useGlobalPkgs = true;
               useUserPackages = true;
@@ -116,6 +125,7 @@
                 imports = [
                   (import ./home)
                   agent-skills.homeManagerModules.default
+                  nous.homeManagerModules.default
                 ];
               };
             };

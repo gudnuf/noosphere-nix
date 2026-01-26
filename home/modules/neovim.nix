@@ -21,8 +21,28 @@
       neo-tree-nvim
       nvim-web-devicons  # Icons for neo-tree
 
-      # Syntax highlighting
-      nvim-treesitter.withAllGrammars
+      # Syntax highlighting (only grammars we need, not all 500+)
+      (nvim-treesitter.withPlugins (p: [
+        p.nix
+        p.lua
+        p.bash
+        p.typescript
+        p.javascript
+        p.json
+        p.yaml
+        p.markdown
+        p.markdown_inline
+        p.toml
+        p.html
+        p.css
+        p.diff
+        p.gitcommit
+        p.gitignore
+        p.vim
+        p.vimdoc
+        p.regex
+        p.query  # for treesitter query files
+      ]))
 
       # LSP support
       nvim-lspconfig
@@ -120,24 +140,33 @@
       })
       vim.keymap.set('n', '<leader>e', ':Neotree toggle<CR>', { desc = 'Toggle file explorer', silent = true })
 
-      -- Treesitter setup
-      require('nvim-treesitter.configs').setup({
-        highlight = {
-          enable = true,
-        },
-        indent = {
-          enable = true,
-        },
+      -- Treesitter setup (Nix manages grammar installation via withAllGrammars)
+      -- Use built-in vim.treesitter APIs for Nix-managed parsers
+      vim.treesitter.language.register('bash', 'zsh')  -- Treat zsh as bash for highlighting
+
+      -- Enable treesitter-based highlighting and indentation
+      vim.api.nvim_create_autocmd('FileType', {
+        callback = function()
+          -- Try to enable treesitter highlighting for the current buffer
+          pcall(vim.treesitter.start)
+        end,
       })
 
-      -- LSP setup
-      local lspconfig = require('lspconfig')
+      -- LSP setup (using vim.lsp.config for Neovim 0.11+)
+      vim.lsp.config('nil_ls', {
+        cmd = { 'nil' },
+        filetypes = { 'nix' },
+        root_markers = { 'flake.nix', '.git' },
+      })
+      vim.lsp.enable('nil_ls')
 
-      -- Nix LSP
-      lspconfig.nil_ls.setup({})
-
-      -- Bash LSP (optional, if you want shell script support)
-      -- lspconfig.bashls.setup({})
+      -- Markdown LSP (marksman)
+      vim.lsp.config('marksman', {
+        cmd = { 'marksman', 'server' },
+        filetypes = { 'markdown' },
+        root_markers = { '.marksman.toml', '.git' },
+      })
+      vim.lsp.enable('marksman')
 
       -- LSP keybindings
       vim.keymap.set('n', 'gd', vim.lsp.buf.definition, { desc = 'Go to definition' })
@@ -171,12 +200,38 @@
         })
       })
 
-      -- Which-key setup
-      require('which-key').setup({
-        window = {
+      -- Which-key setup (shows keybindings when you press leader key)
+      local wk = require('which-key')
+      wk.setup({
+        preset = 'modern',  -- Clean modern look
+        delay = 300,        -- Show popup after 300ms (faster discovery)
+        icons = {
+          mappings = false, -- Disable icons for cleaner look
+        },
+        win = {
           border = 'single',
+          title = true,
+          title_pos = 'center',
         },
       })
+
+      -- Register keybinding groups for better organization
+      wk.add({
+        { '<leader>f', group = 'Find (Telescope)' },
+        { '<leader>s', group = 'Split' },
+        { '<leader>b', group = 'Buffer' },
+        { '<leader>c', group = 'Code' },
+        { '<leader>r', group = 'Refactor' },
+        { '<leader>g', group = 'Git' },
+      })
+
+      -- Show ALL keybindings with <leader>?
+      vim.keymap.set('n', '<leader>?', function()
+        wk.show({ global = true })
+      end, { desc = 'Show all keybindings' })
+
+      -- Show keybindings for current mode with <leader>k
+      vim.keymap.set('n', '<leader>k', ':WhichKey<CR>', { desc = 'Keybinding help', silent = true })
 
       -- Lualine setup (status line)
       require('lualine').setup({
@@ -209,6 +264,23 @@
           topdelete = { text = '‾' },
           changedelete = { text = '~' },
         },
+        on_attach = function(bufnr)
+          local gs = package.loaded.gitsigns
+          local function map(mode, l, r, opts)
+            opts = opts or {}
+            opts.buffer = bufnr
+            vim.keymap.set(mode, l, r, opts)
+          end
+          -- Git navigation
+          map('n', ']c', function() gs.nav_hunk('next') end, { desc = 'Next git change' })
+          map('n', '[c', function() gs.nav_hunk('prev') end, { desc = 'Previous git change' })
+          -- Git actions
+          map('n', '<leader>gs', gs.stage_hunk, { desc = 'Stage hunk' })
+          map('n', '<leader>gr', gs.reset_hunk, { desc = 'Reset hunk' })
+          map('n', '<leader>gp', gs.preview_hunk, { desc = 'Preview hunk' })
+          map('n', '<leader>gb', function() gs.blame_line({ full = true }) end, { desc = 'Blame line' })
+          map('n', '<leader>gd', gs.diffthis, { desc = 'Diff this' })
+        end,
       })
 
       -- Comment.nvim setup
@@ -236,7 +308,8 @@
 
     extraPackages = with pkgs; [
       # LSP servers
-      nil  # Nix LSP (already in dev-tools but good to ensure)
+      nil       # Nix LSP
+      marksman  # Markdown LSP
 
       # Telescope dependencies
       ripgrep

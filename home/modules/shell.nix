@@ -47,13 +47,23 @@ in
 
       # Nix shortcuts
       nrs = "sudo ${rebuildCmd} switch --flake ~/.config/nix-config#${hostname}";
-      nfu = "nix flake update ~/.config/nix-config";
+      nrs-nous = "nix flake lock --update-input nous --flake ~/.config/nix-config && sudo ${rebuildCmd} switch --flake ~/.config/nix-config#${hostname}";
+      nfu = "nix flake update --flake ~/.config/nix-config";
       nfc = "nix flake check ~/.config/nix-config";
+
+      # Remote servers
+      hetzner = "ssh claude@77.42.27.244";
+      mosh-hetzner = "mosh claude@77.42.27.244";
 
       # Safety
       rm = "rm -i";
       mv = "mv -i";
       cp = "cp -i";
+
+      # Claude Code workflow - watching changes
+      cwatch = "watchexec -e nix,md,sh,ts,js,py,go 'clear && git diff | delta --paging=never'";
+      cdiff = "git diff | delta";
+      cstatus = "watch -n1 -c 'git -c color.status=always status'";
     };
 
     initContent = ''
