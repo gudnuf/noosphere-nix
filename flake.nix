@@ -40,7 +40,7 @@
     };
 
     nous = {
-      url = "git+file:///Users/claude/nous?ref=nix-build";
+      url = "git+file:///Users/claude/nous";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
