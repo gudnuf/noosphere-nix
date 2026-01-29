@@ -56,4 +56,18 @@
     enable = true;
     port = 3311;
   };
+
+  # Next.js Dev Apps (IP-based, no SSL required)
+  # Access dev servers at http://77.42.27.244/path/
+  # Remember to run: npm run dev (from the project directory)
+  # And configure next.config.js with basePath: '/path'
+  services.nextjsDev = {
+    enable = true;
+    apps = {
+      woodworks = {
+        path = "goodenoughwoodworks";
+        port = 3000;
+      };
+    };
+  };
 }

@@ -62,7 +62,9 @@
       "WebFetch(domain:mynixos.com)",
       "WebFetch(domain:davi.sh)",
       "WebFetch(domain:github.com)",
-      "WebFetch(domain:dredyson.com)"
+      "WebFetch(domain:dredyson.com)",
+      "Bash(tmux:*)",
+      "Bash(tmux show-options:*)"
     ]
   },
   "outputStyle": "Explanatory"

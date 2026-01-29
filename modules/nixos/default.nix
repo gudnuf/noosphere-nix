@@ -7,11 +7,20 @@
     ./mosh.nix
     ./firewall.nix
     ./vm-guest.nix
+    ./ssl.nix
+    ./dev-proxy.nix
+    ./nextjs-dev.nix
   ];
   # NixOS-specific Nix configuration
   nix = {
     # NixOS-specific GC timing
     gc.dates = "weekly";
+
+    # Enable flakes and new nix commands
+    settings.experimental-features = [
+      "nix-command"
+      "flakes"
+    ];
   };
 
   # System packages available to all users

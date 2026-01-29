@@ -64,6 +64,28 @@ ssh root@77.42.27.244 "nixos-version"
 
 Same as other NixOS hosts - see `modules/nixos/default.nix` and `home/modules/dev-tools.nix`.
 
+## Deployed Services
+
+| Service | Path | Port | Config |
+|---------|------|------|--------|
+| rust-blog | `/` | 3311 | `services.blog` |
+| goodenoughwoodworks | `/goodenoughwoodworks` | 3000 | `services.nextjsDev.apps.woodworks` |
+
+## Redeploying Projects
+
+When working in a project directory, redeploy to this server:
+
+### Blog (`~/the-blog`)
+```bash
+cd ~/noosphere-nix && nix --extra-experimental-features 'nix-command flakes' flake update the-blog && sudo nixos-rebuild switch --flake .#hetzner
+```
+
+### Goodenoughwoodworks (`~/goodenoughwoodworks`)
+Start the dev server (must be running for site to work):
+```bash
+cd ~/goodenoughwoodworks && npm run dev
+```
+
 ## Notes
 
 **Git commit style:** Do NOT add `Co-Authored-By` footers to commit messages. Keep commits clean and simple.
@@ -71,3 +93,4 @@ Same as other NixOS hosts - see `modules/nixos/default.nix` and `home/modules/de
 - Server was set up using nixos-infect from Debian 12
 - Uses GRUB bootloader (BIOS, not UEFI)
 - Static networking configured for Hetzner Cloud
+- Always deploy from `~/noosphere-nix` to preserve all services
