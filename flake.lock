@@ -228,16 +228,15 @@
         ]
       },
       "locked": {
-        "lastModified": 1769446833,
-        "narHash": "sha256-MxAfCf1xLfz3RfXrrui8rz/sS87azWNS9PkZI5BKB/Q=",
-        "ref": "nix-build",
-        "rev": "2d74ecd7be8df041c4731a0b476379d0712faa06",
-        "revCount": 26,
+        "lastModified": 1769451599,
+        "narHash": "sha256-EYk3cJDc2f/U9mn1NmYFPynu3+7YFeqUVeaaLIx95ts=",
+        "ref": "refs/heads/main",
+        "rev": "f22a8bedb45ad688287fb244afdb6ac3e17db265",
+        "revCount": 40,
         "type": "git",
         "url": "file:///Users/claude/nous"
       },
       "original": {
-        "ref": "nix-build",
         "type": "git",
         "url": "file:///Users/claude/nous"
       }

@@ -46,7 +46,24 @@
       "Bash(/opt/homebrew/bin/brew reinstall:*)",
       "WebFetch(domain:trezor.io)",
       "Bash(nix search:*)",
-      "Bash(GNUPGHOME=\"$HOME/.gnupg/trezor\" gpg --list-keys:*)"
+      "Bash(GNUPGHOME=\"$HOME/.gnupg/trezor\" gpg --list-keys:*)",
+      "Bash(defaults read:*)",
+      "Bash(tmux --version:*)",
+      "Bash(sw_vers:*)",
+      "Bash(log show:*)",
+      "Bash(sudo -k)",
+      "Bash(sudo -v:*)",
+      "Bash(bioutil -r:*)",
+      "Bash(/etc/profiles/per-user/claude/bin/ssh:*)",
+      "Bash(ls:*)",
+      "Bash(nix flake update:*)",
+      "Bash(vim --version:*)",
+      "Bash(nvim:*)",
+      "WebFetch(domain:mynixos.com)",
+      "WebFetch(domain:davi.sh)",
+      "WebFetch(domain:github.com)",
+      "WebFetch(domain:dredyson.com)"
     ]
-  }
+  },
+  "outputStyle": "Explanatory"
 }

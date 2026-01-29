@@ -31,6 +31,7 @@ flake.nix              # Entry point, defines inputs & system builders
 ├── skills/            # Local Claude Code skills (syncs to ~/.claude/skills/)
 ├── CLAUDE.md          # Repository-wide documentation (structure, patterns)
 ├── CLAUDE.nous.md     # Host-specific docs for claude@nous (→ ~/.claude/CLAUDE.md)
+├── GIT-SIGNING.md     # FIDO key Git commit signing documentation
 ├── secrets.nix        # Your secrets (git-ignored, not committed)
 └── secrets.nix.template  # Template for secrets file
 ```
@@ -131,6 +132,19 @@ Sensitive data (API tokens, credentials) are stored in `secrets.nix` (git-ignore
 - Shell access via `home.sessionVariables`
 - GUI app access via launchd (macOS requirement)
 - Never committed (in `.gitignore`)
+
+### Git Commit Signing
+
+Git commits are signed using SSH signatures with FIDO2 hardware keys. See **[GIT-SIGNING.md](GIT-SIGNING.md)** for complete documentation.
+
+**Configuration:** `home/modules/git.nix`
+
+**Quick reference:**
+- Signing key: `~/.ssh/id_ed25519_sk_1.pub`
+- Allowed signers: `~/.ssh/allowed_signers` (managed by Nix)
+- Every commit requires physical touch on FIDO key
+
+**To add another FIDO key:** See GIT-SIGNING.md for step-by-step instructions.
 
 ## Adding Packages
 

@@ -160,14 +160,6 @@
       })
       vim.lsp.enable('nil_ls')
 
-      -- Markdown LSP (marksman)
-      vim.lsp.config('marksman', {
-        cmd = { 'marksman', 'server' },
-        filetypes = { 'markdown' },
-        root_markers = { '.marksman.toml', '.git' },
-      })
-      vim.lsp.enable('marksman')
-
       -- LSP keybindings
       vim.keymap.set('n', 'gd', vim.lsp.buf.definition, { desc = 'Go to definition' })
       vim.keymap.set('n', 'K', vim.lsp.buf.hover, { desc = 'Show hover info' })
@@ -309,7 +301,6 @@
     extraPackages = with pkgs; [
       # LSP servers
       nil       # Nix LSP
-      marksman  # Markdown LSP
 
       # Telescope dependencies
       ripgrep

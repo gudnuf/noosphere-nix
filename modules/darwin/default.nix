@@ -5,8 +5,8 @@
   # nix.* options are disabled when using Determinate with nix.enable = false
 
   # System packages available to all users
+  # Note: neovim is installed via Home Manager with vim/vi aliases
   environment.systemPackages = with pkgs; [
-    vim
     curl
     wget
   ];

@@ -15,6 +15,7 @@ in
     ./modules/dev-tools.nix
     ./modules/neovim.nix
     ./modules/skills.nix
+    ./modules/nous.nix
   ];
 
   # Home Manager state version
