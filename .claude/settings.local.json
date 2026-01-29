@@ -39,7 +39,9 @@
       "Bash(hcloud context:*)",
       "Bash(hcloud image:*)",
       "Bash(hcloud ssh-key:*)",
-      "Bash(hcloud server-type:*)"
+      "Bash(hcloud server-type:*)",
+      "Bash(tmux:*)",
+      "Bash(tmux show-options:*)"
     ]
   }
 }

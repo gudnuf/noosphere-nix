@@ -1,6 +1,9 @@
 { lib, ... }:
 
 {
+  # Open port 5173 for dev server
+  networking.firewall.allowedTCPPorts = [ 5173 ];
+
   # Disable systemd-networkd (use traditional networking for static IPs)
   networking.useNetworkd = lib.mkForce false;
   systemd.network.enable = lib.mkForce false;
