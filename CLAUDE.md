@@ -29,6 +29,7 @@ flake.nix              # Entry point, defines inputs & system builders
 │   ├── default.nix    # Home Manager entry point (symlinks CLAUDE.{hostname}.md)
 │   └── modules/       # shell, git, dev-tools, skills
 ├── skills/            # Local Claude Code skills (syncs to ~/.claude/skills/)
+├── README.md          # Public documentation (what this is, how to use)
 ├── CLAUDE.md          # Repository-wide documentation (structure, patterns)
 ├── CLAUDE.nous.md     # Host-specific docs for claude@nous (→ ~/.claude/CLAUDE.md)
 ├── GIT-SIGNING.md     # FIDO key Git commit signing documentation
@@ -108,7 +109,8 @@ Each host has its own `CLAUDE.{hostname}.md` file that documents:
 
 **Current hosts:**
 - `CLAUDE.nous.md` - macOS machine (claude@nous)
-- `CLAUDE.nixos-vm.md` - NixOS VM (future)
+- `CLAUDE.nixos-vm.md` - NixOS local VM
+- `CLAUDE.hetzner.md` - Hetzner cloud server
 
 **To create for a new host:**
 1. Create `CLAUDE.{new-hostname}.md` documenting that machine

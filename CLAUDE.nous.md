@@ -13,7 +13,7 @@ You (Claude Code) are running on this machine as:
 - **Working Directory:** Typically starts in `~` but can navigate anywhere
 - **Skills:** Managed declaratively via `agent-skills-nix` in `home/modules/skills.nix`
   - Skills sync from nix-config to `~/.claude/skills/` on rebuild
-  - Currently enabled: `skill-creator`, `nix-skills-management`, `update-context`
+  - Currently enabled: `skill-creator`, `nix-skills-management`, `update-context`, `update-host-context`
 
 ## Modifying Global State
 
@@ -156,6 +156,7 @@ skills.enable = [
   "skill-creator"
   "nix-skills-management"
   "update-context"
+  "update-host-context"
 ];
 ```
 
